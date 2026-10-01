@@ -12,12 +12,12 @@ your EllesmereUI theme, accent color and font, including live changes.
 
 ## Supported addons
 
-| Addon | What gets skinned |
-|---|---|
-| Auctionator | Its four tabs on the auction house (Shopping, Selling, Cancelling, Auctionator) and their content: buttons, search and price inputs, checkboxes, radio buttons, dropdowns, scroll bars, insets, result lists with their column headers, and the small tabs inside each tab. Also the buy item and buy commodity views, the add/edit item dialog, the list import/export and price history windows, and Auctionator's own confirmation popups. Item rows and icons keep their stock look |
-| BugSack | The sack window: its frame (without the portrait), close button, the filter box on the title bar, the "< Previous", "Send bugs" and "Next >" buttons, the scroll bar, and the three session tabs ("All bugs", "Current session", "Previous session"). The title texts move to the window edge now that the portrait is gone, and the tabs get room for their labels. The error text itself keeps BugSack's look |
-| Talent Loadout Manager | The loadout sidebar next to the talent frame (and next to Talent Tree Viewer's), its buttons and collapse toggle, and its import dialog |
-| Talent Tree Tweaks | The buttons it adds to the talent frame ("Post in Chat", plus "Export" and "Import" on Forever), and the "Import into current loadout" checkbox and accept button in the talent import dialog |
+| Addon | Notes                                                                                                                      |
+|---|----------------------------------------------------------------------------------------------------------------------------|
+| Auctionator | Full skin. Item rows and icons keep their stock look                                                                       |
+| BugSack | Full skin. The error text keeps BugSack's look                                                                             |
+| Talent Loadout Manager | Full skin. The loadout sidebar (also next to Talent Tree Viewer) and its import dialog                                     |
+| Talent Tree Tweaks | Full skin. The export/import buttons on the talent frame and the "Import into current loadout" option in the import dialog |
 
 More addons will follow.
 
