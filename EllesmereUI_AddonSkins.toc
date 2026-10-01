@@ -6,7 +6,7 @@
 ## Author: Feylynn-Antonidas
 ## Version: 1.0.0
 ## Dependencies: EllesmereUI
-## OptionalDeps: TalentTreeTweaks, TalentLoadoutManager
+## OptionalDeps: TalentTreeTweaks, TalentLoadoutManager, Auctionator
 ## IconTexture: Interface\AddOns\EllesmereUI\media\eg-logo.tga
 
 Core.lua
@@ -14,3 +14,4 @@ Core.lua
 # One file per skinned addon; each registers itself via ns.RegisterAddonSkin
 Skins\TalentTreeTweaks.lua
 Skins\TalentLoadoutManager.lua
+Skins\Auctionator.lua

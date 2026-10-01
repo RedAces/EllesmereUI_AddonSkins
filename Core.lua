@@ -31,14 +31,21 @@ local function TryRegister(addonName)
     EllesmereUI.RegisterSkin(addonName, apply)
 end
 
+--- Wraps fn so an error in it is only reported, never raised into the caller (the hooked addon)
+--- @param fn function
+--- @return function
+function ns.Safe(fn)
+    return function(...)
+        xpcall(fn, geterrorhandler(), ...)
+    end
+end
+
 --- hooksecurefunc whose hook can never break the hooked addon: errors are only reported
 --- @param tbl table
 --- @param method string
 --- @param hook function
 function ns.SafeHook(tbl, method, hook)
-    hooksecurefunc(tbl, method, function(...)
-        xpcall(hook, geterrorhandler(), ...)
-    end)
+    hooksecurefunc(tbl, method, ns.Safe(hook))
 end
 
 --- Runs fn(module) on an AceAddon module now, and again after every call of module[method].

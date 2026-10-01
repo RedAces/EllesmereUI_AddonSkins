@@ -89,6 +89,7 @@ are not, so guard them so they run only once per frame.
 |---|---|
 | `ns.RegisterAddonSkin(addonName, fn)` | Registers `fn(S)` as the EllesmereUI skin for `addonName`, once that addon is loaded |
 | `ns.OnAceModuleMethod(addonName, moduleName, method, fn)` | Runs `fn(module)` on an AceAddon module now and after every call of `module[method]`. Does nothing if the addon, module or method doesn't exist |
+| `ns.Safe(fn)` | Wraps `fn` so that an error in it is reported instead of being passed on to the caller |
 | `ns.SafeHook(tbl, method, fn)` | `hooksecurefunc` that reports errors in `fn` instead of passing them on to the hooked code |
 
 ### Guidelines
@@ -98,3 +99,16 @@ are not, so guard them so they run only once per frame.
 - Use EllesmereUI's primitives rather than custom textures or colors, so the skin keeps up with theme changes.
 - Code defensively. Other addons change between versions, so check that a frame or field exists
   before skinning it.
+
+## Big Thanks
+
+- **Ellesmere**, for EllesmereUI and for its skinning API. Without that API this addon couldn't exist,
+  because every skin here is built on it.
+- **Numy**, author of Talent Tree Tweaks and Talent Loadout Manager, for two great addons that
+  make talents much nicer to work with.
+- **plusmouse** and **Borjamacare**, authors of Auctionator, for the addon and for supporting the idea
+  of skinning it through a separate addon.
+
+All skinned addons belong to their respective authors. This addon only styles them from the outside
+and is not affiliated with them. Please report problems with a skin here, not to the authors of the
+skinned addons.
