@@ -1,0 +1,8 @@
+# Claude Code workspace files
+.claude/
+
+# Developer scripts
+*.ps1
+
+# IDE stuff
+.idea
