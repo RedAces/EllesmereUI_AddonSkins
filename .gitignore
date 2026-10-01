@@ -1,5 +1,44 @@
-# Claude Code workspace files
+# AI assistant instructions and workspace files
+# Claude Code
 .claude/
+CLAUDE.md
+CLAUDE.local.md
+# OpenAI Codex and other AGENTS.md-based tools
+AGENTS.md
+AGENTS.override.md
+.codex/
+# Gemini CLI
+GEMINI.md
+.gemini/
+# GitHub Copilot
+.github/copilot-instructions.md
+.github/instructions/
+.github/prompts/
+# Cursor
+.cursor/
+.cursorrules
+.cursorignore
+.cursorindexingignore
+# Windsurf / Codeium
+.windsurf/
+.windsurfrules
+.codeiumignore
+# Cline / Roo Code
+.clinerules
+.clinerules/
+.roo/
+.roorules
+.roomodes
+# Aider
+.aider*
+# Continue
+.continue/
+# Kiro
+.kiro/
+# JetBrains Junie
+.junie/
+# Amazon Q
+.amazonq/
 
 # Developer scripts
 *.ps1
