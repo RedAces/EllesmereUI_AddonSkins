@@ -16,6 +16,7 @@ your EllesmereUI theme, accent color and font, including live changes.
 |---|----------------------------------------------------------------------------------------------------------------------------|
 | Auctionator | Full skin. Item rows and icons keep their stock look                                                                       |
 | BugSack | Full skin. The error text keeps BugSack's look                                                                             |
+| RareScanner | Partial skin: only the popup that appears when it finds a rare, treasure or event. The 3D model, loot bar and arrows keep their look |
 | Talent Loadout Manager | Full skin. The loadout sidebar (also next to Talent Tree Viewer) and its import dialog                                     |
 | Talent Tree Tweaks | Full skin. The export/import buttons on the talent frame and the "Import into current loadout" option in the import dialog |
 
@@ -115,6 +116,7 @@ are not, so guard them so they run only once per frame.
 - **plusmouse** and **Borjamacare**, authors of Auctionator, for the addon and for supporting the idea
   of skinning it through a separate addon.
 - **Funkeh**, author of BugSack, for the addon every UI tinkerer keeps open while things break.
+- **maqjav** and **Maciza-Tyrande**, authors of RareScanner, for never letting a rare slip by unnoticed.
 
 All skinned addons belong to their respective authors. This addon only styles them from the outside
 and is not affiliated with them. Please report problems with a skin here, not to the authors of the

@@ -6,7 +6,7 @@
 ## Author: Feylynn-Antonidas
 ## Version: 1.0.0
 ## Dependencies: EllesmereUI
-## OptionalDeps: TalentTreeTweaks, TalentLoadoutManager, Auctionator, BugSack
+## OptionalDeps: TalentTreeTweaks, TalentLoadoutManager, Auctionator, BugSack, RareScanner
 ## IconTexture: Interface\AddOns\EllesmereUI\media\eg-logo.tga
 
 Core.lua
@@ -16,3 +16,4 @@ Skins\TalentTreeTweaks.lua
 Skins\TalentLoadoutManager.lua
 Skins\Auctionator.lua
 Skins\BugSack.lua
+Skins\RareScanner.lua
