@@ -44,23 +44,10 @@ local function Box(S, editBox)
     if editBox.searchIcon then editBox.searchIcon:SetAlpha(1) end
 end
 
-local function FadeTree(S, frame, keep)
-    if keep[frame] then return end
-    S.FadeRegions(frame)
-    for _, child in ipairs({ frame:GetChildren() }) do FadeTree(S, child, keep) end
-end
-
--- Auctionator's lists use WowTrimScrollBar, whose trough and stepper caps sit on child frames
--- S.ScrollBar never reaches (it handles MinimalScrollBar's flat layout), so fade the whole tree
--- after it. The thumb is kept: it carries the house thumb strip S.ScrollBar paints.
-local function ScrollBar(S, scrollBar)
-    if not scrollBar then return end
-    S.ScrollBar(scrollBar)
-    local keep = {}
-    local thumb = (scrollBar.Track and scrollBar.Track.Thumb) or (scrollBar.GetThumb and scrollBar:GetThumb())
-    if thumb then keep[thumb] = true end
-    FadeTree(S, scrollBar, keep)
-end
+-- Auctionator's lists use WowTrimScrollBar
+local ScrollBar = ns.SkinScrollBar
+local OnePixel = ns.OnePixel
+local LayoutTab = ns.LayoutTab
 
 -- AuctionatorInset(Dark)Template: AH background atlas + inset NineSlice -> flat nested panel
 local function Inset(S, inset)
@@ -145,39 +132,8 @@ local function Listing(S, listing)
     end
 end
 
--------------------------------------------------------------------------------
---  Tab rows
--------------------------------------------------------------------------------
--- One physical pixel in the region's own coordinate space, the seam EUI puts between flat tabs
-local function OnePixel(region)
-    local _, height = GetPhysicalScreenSize()
-    local scale = region:GetEffectiveScale()
-    if not height or height <= 0 or not scale or scale < 0.1 or scale > 10 then return 1 end
-    return 768 / height / scale
-end
-
--- Matches EUI's own tab rows: 2px shorter (once), chained edge to edge with a 1px seam
-local laidOut = {}
-local function LayoutTab(tab, previous)
-    if laidOut[tab] then return end
-    laidOut[tab] = true
-    local height = tab:GetHeight()
-    if height and height > 2 then tab:SetHeight(height - 2) end
-    if previous then
-        tab:ClearAllPoints()
-        tab:SetPoint("LEFT", previous, "RIGHT", OnePixel(tab), 0)
-    end
-end
-
--- Auctionator's in-tab mini tabs; their selection runs through PanelTemplates, which EUI tracks
-local function MiniTabs(S, tabs)
-    local previous
-    for _, tab in ipairs(tabs) do
-        S.Tab(tab)
-        LayoutTab(tab, previous)
-        previous = tab
-    end
-end
+-- Auctionator's in-tab mini tabs; their selection runs through PanelTemplates_SetTab, which EUI tracks
+local MiniTabs = ns.SkinTabRow
 
 -------------------------------------------------------------------------------
 --  Tab content

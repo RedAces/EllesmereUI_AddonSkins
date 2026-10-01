@@ -48,6 +48,69 @@ function ns.SafeHook(tbl, method, hook)
     hooksecurefunc(tbl, method, ns.Safe(hook))
 end
 
+-------------------------------------------------------------------------------
+--  Shared skin helpers, for widgets the API's primitives don't fully cover
+-------------------------------------------------------------------------------
+local function FadeTree(S, frame, keep)
+    if keep[frame] then return end
+    S.FadeRegions(frame)
+    for _, child in ipairs({ frame:GetChildren() }) do FadeTree(S, child, keep) end
+end
+
+--- S.ScrollBar, plus the art it misses: WowTrimScrollBar's trough and stepper caps sit on child
+--- frames (S.ScrollBar handles MinimalScrollBar's flat layout), so the whole tree is faded after it.
+--- The thumb is kept: it carries the house thumb strip S.ScrollBar paints.
+--- @param S table the skinning API
+--- @param scrollBar Frame?
+function ns.SkinScrollBar(S, scrollBar)
+    if not scrollBar then return end
+    S.ScrollBar(scrollBar)
+    local keep = {}
+    local thumb = (scrollBar.Track and scrollBar.Track.Thumb) or (scrollBar.GetThumb and scrollBar:GetThumb())
+    if thumb then keep[thumb] = true end
+    FadeTree(S, scrollBar, keep)
+end
+
+--- One physical pixel in the region's own coordinate space, the seam EUI puts between flat tabs
+--- @param region Region
+--- @return number
+function ns.OnePixel(region)
+    local _, height = GetPhysicalScreenSize()
+    local scale = region:GetEffectiveScale()
+    if not height or height <= 0 or not scale or scale < 0.1 or scale > 10 then return 1 end
+    return 768 / height / scale
+end
+
+-- tabs already laid out; the height trim must not repeat
+local laidOutTabs = {}
+
+--- Lays a skinned (S.Tab) tab out like EUI's own tab rows: 2px shorter, once, and chained to the
+--- previous tab's right edge with a 1px seam. Without `previous` the tab keeps its own seat.
+--- @param tab Button
+--- @param previous Region?
+function ns.LayoutTab(tab, previous)
+    if laidOutTabs[tab] then return end
+    laidOutTabs[tab] = true
+    local height = tab:GetHeight()
+    if height and height > 2 then tab:SetHeight(height - 2) end
+    if previous then
+        tab:ClearAllPoints()
+        tab:SetPoint("LEFT", previous, "RIGHT", ns.OnePixel(tab), 0)
+    end
+end
+
+--- Skins a left-to-right row of tabs with S.Tab and lays it out via ns.LayoutTab
+--- @param S table the skinning API
+--- @param tabs Button[]
+function ns.SkinTabRow(S, tabs)
+    local previous
+    for _, tab in ipairs(tabs) do
+        S.Tab(tab)
+        ns.LayoutTab(tab, previous)
+        previous = tab
+    end
+end
+
 --- Runs fn(module) on an AceAddon module now, and again after every call of module[method].
 --- Meant for addons that build their frames lazily: fn sees whatever exists so far, the hook
 --- catches the rest. Does nothing if the addon is not an AceAddon or lacks the module/method.
