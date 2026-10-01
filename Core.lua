@@ -99,6 +99,35 @@ function ns.LayoutTab(tab, previous)
     end
 end
 
+-- tabs already hooked by ns.WidenTab
+local widenedTabs = {}
+
+local function FitTab(tab, padding)
+    local widest = 0
+    for _, region in ipairs({ tab:GetRegions() }) do
+        if region:IsObjectType("FontString") then
+            local width = region.GetUnboundedStringWidth and region:GetUnboundedStringWidth() or region:GetStringWidth()
+            if width and width > widest then widest = width end
+        end
+    end
+    if widest > 0 and tab:GetWidth() < widest + 2 * padding then tab:SetWidth(widest + 2 * padding) end
+end
+
+--- Gives a skinned (S.Tab) tab room for its label. Blizzard's tab templates size a tab to its own
+--- label, capped, often from their OnShow, and the house label (EUI's font) is wider than Blizzard's,
+--- so the text ends up cramped. The tab is widened to its widest label (measured unbounded, since the
+--- template truncates its own) plus padding on each side, now and after every OnShow. Never narrows.
+--- @param tab Button
+--- @param padding number? per side, default 16
+function ns.WidenTab(tab, padding)
+    padding = padding or 16
+    if not widenedTabs[tab] then
+        widenedTabs[tab] = true
+        tab:HookScript("OnShow", ns.Safe(function(self) FitTab(self, padding) end))
+    end
+    FitTab(tab, padding)
+end
+
 --- Skins a left-to-right row of tabs with S.Tab and lays it out via ns.LayoutTab
 --- @param S table the skinning API
 --- @param tabs Button[]

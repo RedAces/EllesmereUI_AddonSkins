@@ -16,11 +16,18 @@ your EllesmereUI theme, accent color and font, including live changes.
 |---|----------------------------------------------------------------------------------------------------------------------------|
 | Auctionator | Full skin. Item rows and icons keep their stock look                                                                       |
 | BugSack | Full skin. The error text keeps BugSack's look                                                                             |
+| CraftSim | Full skin. Item icons, sliders and list rows keep their stock look                                                         |
 | RareScanner | Partial skin: only the popup that appears when it finds a rare, treasure or event. The 3D model, loot bar and arrows keep their look |
 | Talent Loadout Manager | Full skin. The loadout sidebar (also next to Talent Tree Viewer) and its import dialog                                     |
 | Talent Tree Tweaks | Full skin. The export/import buttons on the talent frame and the "Import into current loadout" option in the import dialog |
 
-More addons will follow.
+### Possible future addons
+
+Not skinned yet, but candidates for upcoming skins:
+
+- Mythic Dungeon Tools (MDT)
+- Northern Sky Raid Tools (NSRT)
+- Simulationcraft (SimCraft)
 
 ## Requirements
 
@@ -97,6 +104,7 @@ are not, so guard them so they run only once per frame.
 | `ns.SkinScrollBar(S, scrollBar)` | `S.ScrollBar` plus the art it misses on `WowTrimScrollBar` (trough and stepper caps on child frames). The thumb is kept |
 | `ns.SkinTabRow(S, tabs)` | Skins a left-to-right row of tabs with `S.Tab` and lays it out like EllesmereUI's own tab rows (see `ns.LayoutTab`) |
 | `ns.LayoutTab(tab, previous)` | Makes a tab 2px shorter and chains it to `previous` with a 1px seam, once per tab. Without `previous` the tab keeps its position |
+| `ns.WidenTab(tab, padding)` | Widens a skinned tab to fit its label plus `padding` (default 16) per side, now and after every `OnShow`, since Blizzard's tab templates cap the width and EllesmereUI's label font is wider |
 | `ns.OnePixel(region)` | One physical pixel in the region's own coordinate space |
 
 ### Guidelines
@@ -117,6 +125,7 @@ are not, so guard them so they run only once per frame.
   of skinning it through a separate addon.
 - **Funkeh**, author of BugSack, for the addon every UI tinkerer keeps open while things break.
 - **maqjav** and **Maciza-Tyrande**, authors of RareScanner, for never letting a rare slip by unnoticed.
+- **genju**, author of CraftSim, for turning profession math into something you can actually plan with.
 
 All skinned addons belong to their respective authors. This addon only styles them from the outside
 and is not affiliated with them. Please report problems with a skin here, not to the authors of the

@@ -44,23 +44,6 @@ local function UnindentTitle(titleBar)
     end
 end
 
--- The tab template sizes each tab to its label, capped, from its own OnShow; with the house
--- label (EUI's font, wider than Blizzard's) that leaves the text cramped. Re-widen after every
--- resize to the widest label on the tab (ours or Blizzard's hidden one, measured unbounded since
--- the template truncates it) plus padding.
-local TAB_PADDING = 16
-local function WidenTab(tab)
-    local widest = 0
-    for _, region in ipairs({ tab:GetRegions() }) do
-        if region:IsObjectType("FontString") then
-            local width = region.GetUnboundedStringWidth and region:GetUnboundedStringWidth() or region:GetStringWidth()
-            if width and width > widest then widest = width end
-        end
-    end
-    if widest > 0 and tab:GetWidth() < widest + 2 * TAB_PADDING then tab:SetWidth(widest + 2 * TAB_PADDING) end
-end
-
-local widenedTabs = {}
 local function SkinSack(S)
     local window = _G.BugSackFrame
     if not window then return end
@@ -92,13 +75,8 @@ local function SkinSack(S)
     local tabs = {}
     for _, name in ipairs(TAB_NAMES) do tabs[#tabs + 1] = _G[name] end
     ns.SkinTabRow(S, tabs)
-    for _, tab in ipairs(tabs) do
-        if not widenedTabs[tab] then
-            widenedTabs[tab] = true
-            tab:HookScript("OnShow", ns.Safe(WidenTab))
-        end
-        WidenTab(tab)
-    end
+    -- the tab template caps the width; the house label needs more room
+    for _, tab in ipairs(tabs) do ns.WidenTab(tab) end
 end
 
 ns.RegisterAddonSkin("BugSack", function(S)
