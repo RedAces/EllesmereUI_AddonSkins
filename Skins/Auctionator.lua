@@ -13,7 +13,7 @@
 --   - Each tab frame's content is skinned on its OnShow, by when the
 --     Lua-built parts (list scroll bars, buy frames) exist. Primitives are
 --     idempotent; the few layout writes are guarded to run once.
---  Item rows, icons and radio buttons stay stock content.
+--  Item rows and icons stay stock content.
 -------------------------------------------------------------------------------
 local _, ns = ...
 if not ns.RegisterAddonSkin then return end
@@ -96,6 +96,42 @@ local function RefreshButtons(S, parent)
             S.Button(child, { "Icon" })
         end
     end
+end
+
+-- Radio buttons: the API has no primitive, so this is S.Checkbox's look made round: near-black
+-- fill, the checkbox's gray 1px edge, an accent dot when checked and the white hover wash. The dot
+-- is our own region toggled from the button's checked state (SetChecked, and clicks, which toggle
+-- a CheckButton without going through SetChecked); Blizzard's art is faded, never replaced.
+local CIRCLE_MASK = "Interface\\CharacterFrame\\TempPortraitAlphaMask"
+local function Disk(button, layer, sublevel, size, r, g, b, a)
+    local disk = button:CreateTexture(nil, layer, nil, sublevel)
+    disk:SetColorTexture(r, g, b, a)
+    disk:SetSize(size, size)
+    disk:SetPoint("CENTER")
+    local mask = button:CreateMaskTexture()
+    mask:SetTexture(CIRCLE_MASK, "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE")
+    mask:SetAllPoints(disk)
+    disk:AddMaskTexture(mask)
+    return disk
+end
+
+local radioDots = {}
+local function RadioButton(S, button)
+    if not button or radioDots[button] then return end
+    for _, region in ipairs({ button:GetRegions() }) do
+        if region:IsObjectType("Texture") then region:SetAlpha(0) end
+    end
+    Disk(button, "BACKGROUND", 0, 14, 0.25, 0.25, 0.25, 1)
+    Disk(button, "BACKGROUND", 1, 12, 0.02, 0.02, 0.02, 1)
+    Disk(button, "HIGHLIGHT", 0, 12, 1, 1, 1, 0.1)
+    local r, g, b = S.GetAccentColor()
+    local dot = Disk(button, "ARTWORK", 0, 6, r, g, b, 1)
+    radioDots[button] = dot
+    local function Sync() dot:SetShown(button:GetChecked() and true or false) end
+    hooksecurefunc(button, "SetChecked", Sync)
+    button:HookScript("OnClick", Sync)
+    Sync()
+    if button.Label then S.White(button.Label) end
 end
 
 local function Listing(S, listing)
@@ -394,6 +430,8 @@ ns.RegisterAddonSkin("Auctionator", function(S)
             if self.DropDown then S.Dropdown(self.DropDown) end
         end)
     end
+    -- e.g. the selling tab's 12/24/48h duration choice
+    HookMixin("AuctionatorConfigRadioButtonMixin", "OnLoad", function(self) RadioButton(S, self.RadioButton) end)
     -- the small square "x" reset buttons; their icon is the .texture region
     HookMixin("AuctionatorResetButtonMixin", "OnLoad", function(self) S.Button(self, { "texture" }) end)
 
@@ -405,6 +443,8 @@ ns.RegisterAddonSkin("Auctionator", function(S)
     HookMixin("AuctionatorTabContainerMixin", "OnLoad", function(self) SetupMainTabs(S, self) end)
     S.OnLooksChanged(function()
         for _, backdrop in pairs(backdrops) do backdrop:SetColorTexture(S.GetPanelColor()) end
+        local r, g, b = S.GetAccentColor()
+        for _, dot in pairs(radioDots) do dot:SetColorTexture(r, g, b, 1) end
     end)
     -- the AH was already visited this session (skinning turned on live)
     SetupMainTabs(S, _G.AuctionatorAHTabsContainer)
