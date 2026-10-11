@@ -1,15 +1,17 @@
 -------------------------------------------------------------------------------
 --  BugSack: the sack window (BugSackFrame) with its title-bar search box,
---  error text, prev/send/next buttons and the three session tabs below.
+--  error text, prev/send/next buttons, the session tabs and the Options tab
+--  (checkboxes, dropdowns and the wipe button).
 --
---  BugSack builds the window on the first BugSack:OpenSack() and shows it
---  right away, so the skin runs after every OpenSack (idempotent primitives,
---  once-only layout). The text area stays BugSack's own: it is the content.
+--  BugSack builds the window on the first BugSack:OpenSack() or
+--  BugSack:OpenConfig() and shows it right away, so the skin runs after both
+--  (idempotent primitives, once-only layout). The text area stays BugSack's
+--  own: it is the content.
 -------------------------------------------------------------------------------
 local _, ns = ...
 if not ns.RegisterAddonSkin then return end
 
-local TAB_NAMES = { "BugSackTabAll", "BugSackTabSession", "BugSackTabLast" }
+local TAB_NAMES = { "BugSackTabAll", "BugSackTabSession", "BugSackTabLast", "BugSackTabOptions" }
 
 local function Btn(S, button)
     if not button then return end
@@ -44,6 +46,52 @@ local function UnindentTitle(titleBar)
     end
 end
 
+-- The checkboxes are 26px frames whose visible box is inset 4px, so the border goes on that inset
+-- too (else a second square frames the box) and the label moves out by the same 4px plus a gap. Once.
+local CHECK_INSET, LABEL_GAP = 4, 4
+local spacedChecks = setmetatable({}, { __mode = "k" })
+local function SkinCheckbox(S, check)
+    S.Checkbox(check, { borderInset = CHECK_INSET })
+    local label = check.Text
+    if spacedChecks[check] or not label or label:GetNumPoints() ~= 1 then return end
+    local point, relativeTo, relativePoint, x, y = label:GetPoint(1)
+    if relativeTo ~= check or not point:find("LEFT") then return end
+    spacedChecks[check] = true
+    label:ClearAllPoints()
+    label:SetPoint(point, relativeTo, relativePoint, (x or 0) + LABEL_GAP, y or 0)
+    -- keep the label clickable like BugSack does, over its new spot
+    check:SetHitRectInsets(0, -label:GetStringWidth() - 4 - LABEL_GAP, 0, 0)
+end
+
+-- DropdownButtonMixin's SetupMenu identifies the modern dropdown regardless of its object type
+local function IsDropdown(frame)
+    return frame:IsObjectType("DropdownButton") or type(frame.SetupMenu) == "function"
+end
+
+-- The options panel is unnamed: it is the window child laid over the text's scroll frame.
+-- Its checkboxes sit directly on it, the dropdowns one level down inside label rows.
+local function SkinOptionWidgets(S, frame, depth)
+    for _, child in ipairs({ frame:GetChildren() }) do
+        if child:IsObjectType("CheckButton") then
+            SkinCheckbox(S, child)
+        elseif IsDropdown(child) then
+            S.Dropdown(child)
+        elseif depth < 2 then
+            SkinOptionWidgets(S, child, depth + 1)
+        end
+    end
+end
+
+local function SkinOptions(S, window, scrollFrame)
+    if not scrollFrame then return end
+    for _, child in ipairs({ window:GetChildren() }) do
+        if child ~= scrollFrame and not child:GetName() and child:GetNumPoints() > 0 then
+            local _, relativeTo = child:GetPoint(1)
+            if relativeTo == scrollFrame then SkinOptionWidgets(S, child, 1) end
+        end
+    end
+end
+
 local function SkinSack(S)
     local window = _G.BugSackFrame
     if not window then return end
@@ -58,10 +106,12 @@ local function SkinSack(S)
     Btn(S, _G.BugSackPrevButton)
     Btn(S, _G.BugSackSendButton)
     Btn(S, _G.BugSackNextButton)
+    Btn(S, _G.BugSackWipeButton) -- disabled while the sack is empty
 
     local text = _G.BugSackScrollText
     local scrollFrame = text and text:GetParent()
     if scrollFrame then ns.SkinScrollBar(S, scrollFrame.ScrollBar) end
+    SkinOptions(S, window, scrollFrame)
 
     -- the filter box (double-click the title) is the only edit box on the title bar
     local titleBar = window.TitleContainer
@@ -97,8 +147,13 @@ ns.RegisterAddonSkin("BugSack", function(S)
     end
 
     local BugSack = _G.BugSack
-    if BugSack and type(BugSack.OpenSack) == "function" then
-        ns.SafeHook(BugSack, "OpenSack", function() SkinSack(S) end)
+    if BugSack then
+        -- OpenConfig (right-click on the minimap icon) opens the window straight on the Options tab
+        for _, method in ipairs({ "OpenSack", "OpenConfig" }) do
+            if type(BugSack[method]) == "function" then
+                ns.SafeHook(BugSack, method, function() SkinSack(S) end)
+            end
+        end
     end
     -- the sack was already opened this session (skinning turned on live)
     SkinSack(S)
