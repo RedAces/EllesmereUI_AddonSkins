@@ -44,7 +44,7 @@ Notes for anyone who wants to add or change a skin. For what the addon does and 
 2. Add the file to the skin list in `EllesmereUI_AddonSkins.toc`, below `Core.lua`.
 3. Add the addon to `## OptionalDeps` in the TOC, so it loads before this addon.
    Keep both TOC lists sorted alphabetically by addon folder name.
-4. Add the addon to the **Supported addons** table in [README.md](README.md) and its author(s) to
+4. Add the addon to the **Supported addons** list in [README.md](README.md) and its author(s) to
    **Big Thanks** there.
 
 The available primitives (`S.Shell`, `S.Button`, `S.EditBox`, `S.Checkbox`, `S.ScrollBar`, `S.Tab`, ...)

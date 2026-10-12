@@ -12,15 +12,20 @@ your EllesmereUI theme, accent color and font, including live changes.
 
 ## Supported addons
 
-| Addon | Notes                                                                                                                      |
-|---|----------------------------------------------------------------------------------------------------------------------------|
-| Auctionator | Full skin. Item rows and icons keep their stock look                                                                       |
-| BugSack | Full skin. The error text keeps BugSack's look                                                                             |
-| CraftSim | Full skin. Item icons, sliders and list rows keep their stock look                                                         |
-| LargerMacroIconSelection | Full skin, including the Blizzard icon pickers it extends (macro, equipment set, bank tab, ...). The icons keep their stock look |
-| RareScanner | Partial skin: only the popup that appears when it finds a rare, treasure or event. The 3D model, loot bar and arrows keep their look |
-| Talent Loadout Manager | Full skin. The loadout sidebar (also next to Talent Tree Viewer) and its import dialog                                     |
-| Talent Tree Tweaks | Full skin. The export/import buttons on the talent frame and the "Import into current loadout" option in the import dialog |
+These addons will be skinned:
+
+- Auctionator
+- BugSack
+- CraftSim
+- LargerMacroIconSelection
+- RareScanner (Partial skin: only the popup that appears when it finds a rare, treasure or event. The 3D model, loot bar and arrows keep their look)
+- Talent Loadout Manager
+- Talent Tree Tweaks
+
+You can toggle each addon via **EllesmereUI Options → Blizz UI Enhanced → Blizzard Window Skins → Third-Party Addons**
+
+From there you can switch off all third-party skins with the master toggle, or individual addons.
+Turning a skin on applies right away. Turning one off needs a `/reload`.
 
 ### Possible future addons
 
@@ -30,6 +35,15 @@ Not skinned yet, but candidates for upcoming skins:
 - Northern Sky Raid Tools (NSRT)
 - Simulationcraft (SimCraft)
 
+### Addons supported by other skinning addons
+
+These addons are not supported by **EllesmereUI AddonSkins** because other authors have already created a skinning addon:
+
+- [BetterBags](https://www.curseforge.com/wow/addons/betterbags-ellesmereui-theme)
+- [PremadeGroupsFilter](https://www.curseforge.com/wow/addons/premade-groups-filter-ellesmereui)
+- [Pretty Reps](https://www.curseforge.com/wow/addons/pretty-reps-eui-skin)
+- [Rematch](https://www.curseforge.com/wow/addons/rematch-ellesmereui-skin)
+
 ## Requirements
 
 - **EllesmereUI** with its *Blizz UI Enhanced* module enabled. That module provides the skinning API.
@@ -38,24 +52,13 @@ Not skinned yet, but candidates for upcoming skins:
 ## Installation
 
 Install it like any other addon, into `World of Warcraft\_retail_\Interface\AddOns\EllesmereUI_AddonSkins\`,
-and restart the game client.
-
-## Turning skins on and off
-
-Every skinned addon shows up under its own name in EllesmereUI's options:
-
-**Blizz UI Enhanced → Blizzard Window Skins → Third-Party Addons**
-
-From there you can switch off all third-party skins with the master toggle, or individual addons.
-Turning a skin on applies right away. Turning one off needs a `/reload`.
+and restart the game client. Or use your preferred WoW addon client.
 
 ## Good to know
 
 - If a supported addon ever ships its own EllesmereUI skin, that skin wins and the one here is
   ignored, so you never get both.
 - A broken skin can never break the skinned addon: errors in a skin are caught and reported.
-- Talent Loadout Manager: this addon keeps EllesmereUI's skin for Blizzard's talent window from
-  restyling the loadout sidebar. That also happens with the Talent Loadout Manager skin switched off.
 
 ## Contributing
 
