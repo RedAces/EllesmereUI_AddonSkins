@@ -40,9 +40,12 @@ Not skinned yet, but candidates for upcoming skins:
 These addons are not supported by **EllesmereUI AddonSkins** because other authors have already created a skinning addon:
 
 - [BetterBags](https://www.curseforge.com/wow/addons/betterbags-ellesmereui-theme)
+- [MountsJournal](https://www.curseforge.com/wow/addons/mountsjournal-ellesmereui-skin)
 - [PremadeGroupsFilter](https://www.curseforge.com/wow/addons/premade-groups-filter-ellesmereui)
 - [Pretty Reps](https://www.curseforge.com/wow/addons/pretty-reps-eui-skin)
 - [Rematch](https://www.curseforge.com/wow/addons/rematch-ellesmereui-skin)
+
+And look at [EUI AddonSkins](https://www.curseforge.com/wow/addons/eui-addon-skins) for a lot more skins!
 
 ## Requirements
 
