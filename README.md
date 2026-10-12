@@ -17,6 +17,7 @@ your EllesmereUI theme, accent color and font, including live changes.
 | Auctionator | Full skin. Item rows and icons keep their stock look                                                                       |
 | BugSack | Full skin. The error text keeps BugSack's look                                                                             |
 | CraftSim | Full skin. Item icons, sliders and list rows keep their stock look                                                         |
+| LargerMacroIconSelection | Full skin, including the Blizzard icon pickers it extends (macro, equipment set, bank tab, ...). The icons keep their stock look |
 | RareScanner | Partial skin: only the popup that appears when it finds a rare, treasure or event. The 3D model, loot bar and arrows keep their look |
 | Talent Loadout Manager | Full skin. The loadout sidebar (also next to Talent Tree Viewer) and its import dialog                                     |
 | Talent Tree Tweaks | Full skin. The export/import buttons on the talent frame and the "Import into current loadout" option in the import dialog |
@@ -126,6 +127,7 @@ are not, so guard them so they run only once per frame.
 - **Funkeh**, author of BugSack, for the addon every UI tinkerer keeps open while things break.
 - **maqjav** and **Maciza-Tyrande**, authors of RareScanner, for never letting a rare slip by unnoticed.
 - **genju**, author of CraftSim, for turning profession math into something you can actually plan with.
+- **Xinhuan** and **Ketho**, authors of LargerMacroIconSelection, for making the right icon a quick search away.
 
 All skinned addons belong to their respective authors. This addon only styles them from the outside
 and is not affiliated with them. Please report problems with a skin here, not to the authors of the

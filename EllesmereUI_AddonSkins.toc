@@ -6,7 +6,7 @@
 ## Author: Feylynn-Antonidas
 ## Version: @project-version@
 ## Dependencies: EllesmereUI
-## OptionalDeps: Auctionator, BugSack, CraftSim, RareScanner, TalentLoadoutManager, TalentTreeTweaks
+## OptionalDeps: Auctionator, BugSack, CraftSim, LargerMacroIconSelection, RareScanner, TalentLoadoutManager, TalentTreeTweaks
 ## IconTexture: Interface\AddOns\EllesmereUI_AddonSkins\media\icon.tga
 ## X-Curse-Project-ID: 1739614
 ## X-Wago-ID: aND93A6o
@@ -17,6 +17,7 @@ Core.lua
 Skins\Auctionator.lua
 Skins\BugSack.lua
 Skins\CraftSim.lua
+Skins\LargerMacroIconSelection.lua
 Skins\RareScanner.lua
 Skins\TalentLoadoutManager.lua
 Skins\TalentTreeTweaks.lua
