@@ -2,16 +2,29 @@
 --  TalentLoadoutManager: the loadout sidebar next to the talent frame (and
 --  next to TalentTreeViewer's), its toggle button and its import dialog.
 --
---  TLM builds sidebar + import dialog once per module, in SetupHook, when the
---  talent UI loads. Both modules ("SideBar" for Blizzard's talent frame,
---  "TTVSideBar" for TalentTreeViewer) carry their own copy of the mixin, so
---  each one is hooked on its own.
+--  TLM builds sidebar + import dialog once per sidebar module, in SetupHook,
+--  when the talent UI loads, and then fires its SideBarLoaded event. Sidebars
+--  set up earlier are listed in TalentLoadoutManager.sideBars.
 -------------------------------------------------------------------------------
 local _, ns = ...
 if not ns.RegisterAddonSkin then return end
 
 local ADDON = "TalentLoadoutManager"
-local MODULES = { "SideBar", "TTVSideBar" }
+
+--- Runs fn(module) for every sidebar module that is already set up, and for each one set up later.
+local function ForEachSideBar(fn)
+    local TLM = _G.TalentLoadoutManager
+    local event = type(TLM) == "table" and TLM.Event and TLM.Event.SideBarLoaded
+    if not (event and TLM.RegisterCallback and type(TLM.sideBars) == "table") then return end
+    local safeFn = ns.Safe(fn)
+    for _, module in pairs(TLM.sideBars) do
+        if module.SideBar then safeFn(module) end
+    end
+    -- the registry keys callbacks by owner, so every caller needs its own owner table
+    TLM:RegisterCallback(event, function(_, _, module)
+        if type(module) == "table" then safeFn(module) end
+    end, {})
+end
 
 -- References on the talents tab mark sidebar and toggle button as addon-owned, so EllesmereUI's
 -- Blizzard talent-frame skin, which sweeps that frame, leaves them alone instead of flattening the
@@ -28,9 +41,7 @@ local function MarkAddonOwned(module)
 end
 
 if C_AddOns.IsAddOnLoaded(ADDON) then
-    for _, moduleName in ipairs(MODULES) do
-        ns.OnAceModuleMethod(ADDON, moduleName, "SetupHook", MarkAddonOwned)
-    end
+    ForEachSideBar(MarkAddonOwned)
 end
 
 local function SkinButton(S, button)
@@ -51,6 +62,22 @@ local function SkinSideBar(S, sideBar)
         toggleButton.ArrowHighlight = toggleButton:GetHighlightTexture()
         S.Button(toggleButton, { "Arrow", "ArrowHighlight" })
     end
+end
+
+-- moves only the points of region that are anchored to anchor
+local function ShiftPointsFrom(region, anchor, dx, dy)
+    local points, moved = {}, false
+    for i = 1, region:GetNumPoints() do
+        local point, relativeTo, relativePoint, x, y = region:GetPoint(i)
+        if relativeTo == anchor then
+            moved = true
+            x, y = x + dx, y + dy
+        end
+        points[i] = { point, relativeTo, relativePoint, x, y }
+    end
+    if not moved then return end
+    region:ClearAllPoints()
+    for _, p in ipairs(points) do region:SetPoint(unpack(p)) end
 end
 
 local function SkinImportDialog(S, dialog)
@@ -75,7 +102,15 @@ local function SkinImportDialog(S, dialog)
         local checkbox = dialog[key]
         if checkbox then
             S.Checkbox(checkbox)
-            if checkbox.text then S.White(checkbox.text) end
+            -- EUI's box fills the whole button, which TLM seats right below the name input; the
+            -- second checkbox hangs off the first, so only the one anchored to the input moves
+            if dialog.NameControl then ShiftPointsFrom(checkbox, dialog.NameControl, 0, -6) end
+            local label = checkbox.text
+            if label then
+                S.White(label)
+                -- the template seats the label flush against the button
+                ShiftPointsFrom(label, checkbox, 6, 0)
+            end
         end
     end
 
@@ -103,12 +138,10 @@ end
 local skinned = {}
 
 ns.RegisterAddonSkin(ADDON, function(S)
-    for _, moduleName in ipairs(MODULES) do
-        ns.OnAceModuleMethod(ADDON, moduleName, "SetupHook", function(module)
-            if skinned[module] or not (module.SideBar and module.importDialog) then return end
-            skinned[module] = true
-            SkinSideBar(S, module.SideBar)
-            SkinImportDialog(S, module.importDialog)
-        end)
-    end
+    ForEachSideBar(function(module)
+        if skinned[module] or not (module.SideBar and module.importDialog) then return end
+        skinned[module] = true
+        SkinSideBar(S, module.SideBar)
+        SkinImportDialog(S, module.importDialog)
+    end)
 end)

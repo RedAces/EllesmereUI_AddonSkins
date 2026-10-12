@@ -58,7 +58,8 @@ Turning a skin on applies right away. Turning one off needs a `/reload`.
 - EllesmereUI keeps the **first** registration per name. If a supported addon ever ships its own
   EllesmereUI skin, that skin wins and the one here is ignored, so you never get both.
 - Most of these addons build their frames lazily, for example once the talent UI loads. The skins
-  hook the method that creates those frames, so frames made at any point in the session get skinned too.
+  hook the method that creates those frames, or listen to the addon's own event for it where it offers
+  one (Talent Loadout Manager does), so frames made at any point in the session get skinned too.
 - All hooks are post-hooks (`hooksecurefunc`) with their errors caught and reported. A broken skin can
   never break the skinned addon. EllesmereUI isolates every skin callback the same way.
 - Talent Loadout Manager: EllesmereUI's own skin for Blizzard's talent window would otherwise mistake
