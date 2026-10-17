@@ -3,7 +3,7 @@
 ## Category: |cff0cd29fEllesmere|rUI
 ## Group: EllesmereUI
 ## Notes: Skins other addons in the EllesmereUI look via the EllesmereUI skinning API.
-## Author: Feylynn-Antonidas
+## Author: RedAces
 ## Version: @project-version@
 ## Dependencies: EllesmereUI
 ## OptionalDeps: Auctionator, BugSack, CraftSim, LargerMacroIconSelection, RareScanner, TalentLoadoutManager, TalentTreeTweaks

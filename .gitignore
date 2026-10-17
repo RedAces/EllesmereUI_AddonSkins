@@ -42,6 +42,7 @@ GEMINI.md
 
 # Developer scripts
 *.ps1
+bin/dev/
 
 # IDE stuff
 .idea
