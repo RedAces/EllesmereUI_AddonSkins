@@ -1,7 +1,8 @@
 -------------------------------------------------------------------------------
 --  Auctionator (retail AH): its four tabs on the auction house (Shopping,
 --  Selling, Cancelling, Auctionator) with their content, the shopping/buy
---  dialogs and Auctionator's own popups.
+--  dialogs, Auctionator's own popups and the "Search" button it adds to the
+--  objective tracker's profession header.
 --
 --  Auctionator builds its AH UI on the first AH visit: the tab container's
 --  OnLoad creates the tab frames + LibAHTab tab buttons, the buy frames follow
@@ -404,6 +405,14 @@ ns.RegisterAddonSkin("Auctionator", function(S)
     end)
     -- the AH was already visited this session (skinning turned on live)
     SetupMainTabs(S, _G.AuctionatorAHTabsContainer)
+
+    -- "Search" button on the objective tracker's profession header. Auctionator creates the
+    -- frame at PLAYER_LOGIN, which can come before or after this callback, so cover both.
+    HookMixin("AuctionatorCraftingInfoObjectiveTrackerFrameMixin", "OnLoad", function(self)
+        Btn(S, self.SearchButton)
+    end)
+    local tracker = _G.AuctionatorCraftingInfoObjectiveTrackerFrame
+    if tracker then Btn(S, tracker.SearchButton) end
 
     -- Auctionator.Dialogs popups: AuctionatorDialog1..n, created on first use
     local dialogs = Auctionator and Auctionator.Dialogs
