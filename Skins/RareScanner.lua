@@ -14,15 +14,38 @@ if not ns.RegisterAddonSkin then return end
 
 local POPUP_NAME = "RARESCANNER_BUTTON"
 
+-- the region keys BackdropTemplate stores its edge and center pieces under
+local BACKDROP_PIECES = {
+    "TopLeftCorner", "TopRightCorner", "BottomLeftCorner", "BottomRightCorner",
+    "TopEdge", "BottomEdge", "LeftEdge", "RightEdge", "Center",
+}
+
+local edgeHooked = false
+
 ns.RegisterAddonSkin("RareScanner", function(S)
     local popup = _G[POPUP_NAME]
     if not popup then return end
 
     -- The parchment (normal texture), the title ribbon and the tooltip-style backdrop edge are all
     -- regions of the button, so S.Button takes them along and lays down the flat house block with
-    -- its border and hover wash. RareScanner's own hover recolors the backdrop edge, which stays
-    -- faded; the wash takes over that cue.
+    -- its border and hover wash. The wash takes over the hover cue of RareScanner's backdrop edge.
     S.Button(popup)
+
+    -- RareScanner's OnEnter turns the tooltip-style edge white, which only makes sense around its
+    -- parchment and showed through the house look as a white frame on hover. Fade the edge pieces
+    -- again after each of its color writes (OnEnter and OnLeave both go through this method).
+    local function FadeBackdropEdge()
+        for _, key in ipairs(BACKDROP_PIECES) do
+            local piece = popup[key]
+            if piece and piece.SetAlpha then piece:SetAlpha(0) end
+        end
+    end
+    FadeBackdropEdge()
+    if not edgeHooked and type(popup.SetBackdropBorderColor) == "function" then
+        edgeHooked = true
+        ns.SafeHook(popup, "SetBackdropBorderColor", FadeBackdropEdge)
+    end
+
     if popup.CloseButton then S.CloseButton(popup.CloseButton) end
 
     -- the name and the "click to target" line, in the user's UI font
